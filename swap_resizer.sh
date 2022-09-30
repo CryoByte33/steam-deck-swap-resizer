@@ -24,20 +24,20 @@ if [ "$CONSENT" = "y" ] || [ "$CONSENT" = "Y" ]; then
     read -p "${yellow}How large would you like the swapfile to be in GB? (1-32)${reset} => " SIZE
     if [ "$SIZE" -ge "1" ] && [ "$SIZE" -le "32" ] && [ "$SIZE" -lt $(echo $AVAILABLE | sed -e 's/[BKMGT]//') ]; then
         echo "Disabling read-only filesystem..."
-        sudo steamos-readonly disable
+        steamos-readonly disable
         echo "Disabling swap..."
-        sudo swapoff -a
+        swapoff -a
         echo "Removing old swapfile..."
-        sudo rm -f /home/swapfile
+        rm -f /home/swapfile
         echo "Creating new $SIZE GB swapfile..."
-        sudo dd if=/dev/zero of=/home/swapfile bs=1G count=$SIZE
+        dd if=/dev/zero of=/home/swapfile bs=1G count=$SIZE
         echo "Setting permissions on swapfile..."
-        sudo chmod 0600 /home/swapfile
+        chmod 0600 /home/swapfile
         echo "Initializing new swapfile..."
-        sudo mkswap /home/swapfile 
-        sudo swapon /home/swapfile
+        mkswap /home/swapfile 
+        swapon /home/swapfile
         echo "Re-enabling read-only filesystem..."
-        sudo steamos-readonly enable
+        steamos-readonly enable
         echo
         echo "${green}Process completed! You can verify the file is resized by doing 'ls /home' or using 'swapon -s'.${reset}"
         echo "${green}Enjoy your Deck!${reset}"
