@@ -3,6 +3,8 @@
 # I am in no way responsible to damage done to any device this
 # is executed on, all liability lies with the runner.
 
+[ "$UID" -eq 0 ] || exec sudo "$0" "$@"
+
 TERM=xterm-256color
 red="$(tput setaf 1)"
 green="$(tput setaf 2)"
@@ -22,20 +24,20 @@ if [ "$CONSENT" = "y" ] || [ "$CONSENT" = "Y" ]; then
     read -p "${yellow}How large would you like the swapfile to be in GB? (1-32)${reset} => " SIZE
     if [ "$SIZE" -ge "1" ] && [ "$SIZE" -le "32" ] && [ "$SIZE" -lt $(echo $AVAILABLE | sed -e 's/[BKMGT]//') ]; then
         echo "Disabling read-only filesystem..."
-        steamos-readonly disable
+        sudo -u $SUDO_USER steamos-readonly disable
         echo "Disabling swap..."
-        swapoff -a
+        sudo -u $SUDO_USER swapoff -a
         echo "Removing old swapfile..."
-        rm -f /home/swapfile
+        sudo -u $SUDO_USER rm -f /home/swapfile
         echo "Creating new $SIZE GB swapfile..."
-        dd if=/dev/zero of=/home/swapfile bs=1G count=$SIZE
+        sudo -u $SUDO_USER dd if=/dev/zero of=/home/swapfile bs=1G count=$SIZE
         echo "Setting permissions on swapfile..."
-        chmod 0600 /home/swapfile
+        sudo -u $SUDO_USER chmod 0600 /home/swapfile
         echo "Initializing new swapfile..."
-        mkswap /home/swapfile 
-        swapon /home/swapfile
+        sudo -u $SUDO_USER mkswap /home/swapfile 
+        sudo -u $SUDO_USER swapon /home/swapfile
         echo "Re-enabling read-only filesystem..."
-        steamos-readonly enable
+        sudo -u $SUDO_USER steamos-readonly enable
         echo
         echo "${green}Process completed! You can verify the file is resized by doing 'ls /home' or using 'swapon -s'.${reset}"
         echo "${green}Enjoy your Deck!${reset}"

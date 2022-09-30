@@ -6,7 +6,7 @@ Any method **REQUIRES** a password set on the Steam Deck. That can be done with 
 
 ### Direct / Simple
 This method is one command, but you have to trust the source. I recommend reading the script if you don't trust it.
-`curl -sL https://raw.githubusercontent.com/CryoByte33/steam-deck-swap-resizer/main/swap_resizer.sh | sudo -E bash -`
+`curl -sL https://raw.githubusercontent.com/CryoByte33/steam-deck-swap-resizer/main/swap_resizer.sh | sh`
 
 ### Local Storage
 This method lets you download the script locally to have on hand. You can also modify it if you'd like, but 
