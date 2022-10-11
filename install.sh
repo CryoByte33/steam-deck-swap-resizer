@@ -24,7 +24,7 @@ echo '#!/usr/bin/env xdg-open
 [Desktop Entry]
 Name=Swap Resizer
 Exec=bash $HOME/.swap_resizer/swap_resizer.sh
-Icon=delete
+Icon=steamdeck-gaming-return
 Terminal=true
 Type=Application
 StartupNotify=false' > ~/Desktop/SwapResizer.desktop
