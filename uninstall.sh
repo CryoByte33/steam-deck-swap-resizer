@@ -2,7 +2,7 @@
 # Author: CryoByte33
 
 # Delete install directory
-rmdir -r "$HOME/.swap_resizer"
+rm -rf "$HOME/.swap_resizer"
 
 # Remove Desktop icons
 rm -rf ~/Desktop/SwapResizerUninstall.desktop 2>/dev/null
