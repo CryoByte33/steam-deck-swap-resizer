@@ -17,5 +17,5 @@ I don't recommend that unless you know what you're doing!
 git clone https://github.com/CryoByte33/steam-deck-swap-resizer.git
 cd steam-deck-swap-resizer
 chmod +x swap_resizer.sh
-sudo ./swap_resizer.sh
+./swap_resizer.sh
 ```
