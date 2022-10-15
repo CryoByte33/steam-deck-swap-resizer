@@ -51,8 +51,20 @@ else
             else
                 zenity --error --title="Invalid Size" --text="You selected a size greater than the space you have available, cannot proceed." --width=500
             fi
+
+            # get the current vm.swappiness to provide as an option
+            CURRENT_VM_SWAPPINESS=$(sysctl vm.swappiness)
+            # ask user what to set swappiness to
+            SWAPINESS_ANSWER=$(zenity --list --title="Would you like to tune the vm.swappiness to be less aggressive? (Current value is ${CURRENT_VM_SWAPPINESS}; 1 is recommended)" --column="0" "vm.swappiness=${CURRENT_VM_SWAPPINESS:16}" "100" "50" "30" "1" --width=100 --height=300 --hide-header)
+
+            # update live value of vm.swappiness and enable persistence
+            sysctl -w "vm.swappiness=${SWAPINESS_ANSWER}"
+            echo "vm.swappiness=${SWAPINESS_ANSWER}" > /etc/sysctl.d/swappiness.conf
+
         else
             zenity --error --title="Terms Denied" --text="Terms were denied, cannot proceed." --width=300
         fi
+
+        
     fi
 fi
