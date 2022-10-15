@@ -1,4 +1,4 @@
-#!/bin/bash
+\#!/bin/bash
 # Author: CryoByte33
 # I am in no way responsible to damage done to any device this
 # is executed on, all liability lies with the runner.
@@ -14,10 +14,20 @@ else
         zenity --error --title="Password Error" --text="Incorrect password provided, please run this command again and provide the correct password." --width=400
     else
         if zenity --question --title="Disclaimer" --text="This script was made by CryoByte33 to resize the swapfile on a Steam Deck.\n\n<b>Disclaimer: I am in no way responsible to damage done to any device this is executed on, all liability lies with the runner.</b>\n\nDo you accept these terms?" --width=600; then
-            AVAILABLE=$(df --output="avail" -hl --sync /home | grep -v "Avail" | sed -e 's/^[ \t]*//')
+            AVAILABLE=$(df --output="avail" -lh --sync /home | grep -v "Avail" | sed -e 's/^[ \t]*//')
+            MACHINE_AVAILABLE=$(( $(df --output="avail" -l --sync /home | grep -v "Avail" | sed -e 's/^[ \t]*//') * 1024 ))
             SIZE=$(zenity --list --radiolist --text "You have $AVAILABLE space available, what size would you like the swap file (in GB)?" --hide-header --column "Selected" --column "Size" TRUE "1" FALSE "2" FALSE "4" FALSE "8" FALSE "12" FALSE "16" FALSE "32")
+            MACHINE_SIZE=$(( $SIZE * 1024 * 1024 ))
+            CURRENT_SWAP_SIZE=$(ls -l /home/swapfile | awk '{print $5}')
+            TOTAL_AVAILABLE=$(( $MACHINE_AVAILABLE + $CURRENT_SWAP_SIZE ))
+            echo "Debugging Information:"
+            echo "----------------------"
+            echo "Bytes Available: $MACHINE_AVAILABLE"
+            echo "Chosen Size: $MACHINE_SIZE"
+            echo "Current Swap Size in Bytes: $CURRENT_SWAP_SIZE"
+            echo "Total Size Available: $TOTAL_AVAILABLE"
 
-            if [ "$SIZE" -lt $(echo $AVAILABLE | sed -e 's/[BKMGT]//') ]; then
+            if [ "$MACHINE_SIZE" -lt $TOTAL_AVAILABLE ]; then
                 (
                     echo 0
                     echo "# Disabling swap..."
