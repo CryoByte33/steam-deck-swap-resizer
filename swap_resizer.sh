@@ -1,4 +1,4 @@
-\#!/bin/bash
+#!/bin/bash
 # Author: CryoByte33
 # I am in no way responsible to damage done to any device this
 # is executed on, all liability lies with the runner.
@@ -32,16 +32,13 @@ else
                     echo 0
                     echo "# Disabling swap..."
                     sudo swapoff -a
-                    echo 20
-                    echo "# Removing old swapfile..."
-                    sudo rm -f /home/swapfile
-                    echo 40
-                    echo "# Creating new $SIZE GB swapfile..."
+                    echo 25
+                    echo "# Creating new $SIZE GB swapfile (be patient, this can take between 10 seconds and 30 minutes)..."
                     sudo dd if=/dev/zero of=/home/swapfile bs=1G count=$SIZE status=none
-                    echo 60
+                    echo 50
                     echo "# Setting permissions on swapfile..."
                     sudo chmod 0600 /home/swapfile
-                    echo 80
+                    echo 75
                     echo "# Initializing new swapfile..."
                     sudo mkswap /home/swapfile 
                     sudo swapon /home/swapfile
