@@ -55,7 +55,11 @@ else
             if zenity --question --title="Change Swappiness?" --text="Would you like to change swappiness?\n\nCurrent value: $CURRENT_VM_SWAPPINESS\nRecommended: 1" --width=300 2> /dev/null; then
                 SWAPPINESS_ANSWER=$(zenity --list --title "Swappiness Value" --text "What value would you like to use for swappiness?" --column="vm.swappiness" "100" "50" "30" "1" --width=100 --height=300 2> /dev/null)
                 sudo sysctl -w "vm.swappiness=$SWAPPINESS_ANSWER"
-                echo "vm.swappiness=$SWAPPINESS_ANSWER" | sudo tee /etc/sysctl.d/zzz-custom-swappiness.conf
+                if [ "$SWAPPINESS_ANSWER" -eq "100" ]; then
+                    sudo rm /etc/sysctl.d/zzz-custom-swappiness.conf
+                else
+                    echo "vm.swappiness=$SWAPPINESS_ANSWER" | sudo tee /etc/sysctl.d/zzz-custom-swappiness.conf
+                fi
             fi
         else
             zenity --error --title="Terms Denied" --text="Terms were denied, cannot proceed." --width=300 2> /dev/null
