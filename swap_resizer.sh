@@ -45,7 +45,7 @@ else
                         sudo mkswap /home/swapfile 
                         sudo swapon /home/swapfile
                         echo 100
-                        echo "# Process completed! You can verify the file is resized by doing 'ls /home' or using 'swapon -s'."
+                        echo "# Process completed! You can verify the file is resized by doing 'ls -lash /home/swapfile' or using 'swapon -s'."
                     ) | zenity --title "Resizing Swap File" --progress --no-cancel --width=800 2> /dev/null
                 else
                     zenity --error --title="Invalid Size" --text="You selected a size greater than the space you have available, cannot proceed." --width=500 2> /dev/null
