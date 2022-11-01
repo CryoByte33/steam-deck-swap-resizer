@@ -13,8 +13,14 @@ else
     if [[ $ans == 1 ]]; then
         zenity --error --title="Password Error" --text="Incorrect password provided, please run this command again and provide the correct password." --width=400 2> /dev/null
     else
+        SWAPFILE=$(swapon | grep swapfile | cut -d" " -f1)
+        if [ ! -f "$SWAPFILE" ]; then
+            echo "$SWAPFILE does not exist."
+            zenity --error --title="Swapfile not found" --text="The file $SWAPFILE does not exist" --width=400 2> /dev/null
+            exit 1
+        fi
         if zenity --question --title="Disclaimer" --text="This script was made by CryoByte33 to resize the swapfile on a Steam Deck.\n\n<b>Disclaimer: I am in no way responsible to damage done to any device this is executed on, all liability lies with the runner.</b>\n\nDo you accept these terms?" --width=600 2> /dev/null; then
-            CURRENT_SWAP_SIZE=$(ls -l /home/swapfile | awk '{print $5}')
+            CURRENT_SWAP_SIZE=$(ls -l "$SWAPFILE" | awk '{print $5}')
             CURRENT_VM_SWAPPINESS=$(sysctl vm.swappiness | awk '{print $3}')
             if zenity --question --title="Change Swap Size?" --text="Do you want to change the swap file size?" --width=300 2> /dev/null; then
                 AVAILABLE=$(df --output="avail" -lh --sync /home | grep -v "Avail" | sed -e 's/^[ \t]*//')
@@ -36,16 +42,16 @@ else
                         sudo swapoff -a
                         echo 25
                         echo "# Creating new $SIZE GB swapfile (be patient, this can take between 10 seconds and 30 minutes)..."
-                        sudo dd if=/dev/zero of=/home/swapfile bs=1G count=$SIZE status=none
+                        sudo dd if=/dev/zero of="$SWAPFILE" bs=1G count=$SIZE status=none
                         echo 50
                         echo "# Setting permissions on swapfile..."
-                        sudo chmod 0600 /home/swapfile
+                        sudo chmod 0600 "$SWAPFILE"
                         echo 75
                         echo "# Initializing new swapfile..."
-                        sudo mkswap /home/swapfile 
-                        sudo swapon /home/swapfile
+                        sudo mkswap "$SWAPFILE" 
+                        sudo swapon "$SWAPFILE"
                         echo 100
-                        echo "# Process completed! You can verify the file is resized by doing 'ls -lash /home/swapfile' or using 'swapon -s'."
+                        echo "# Process completed! You can verify the file is resized by doing 'ls -lash $SWAPFILE' or using 'swapon -s'."
                     ) | zenity --title "Resizing Swap File" --progress --no-cancel --width=800 2> /dev/null
                 else
                     zenity --error --title="Invalid Size" --text="You selected a size greater than the space you have available, cannot proceed." --width=500 2> /dev/null
