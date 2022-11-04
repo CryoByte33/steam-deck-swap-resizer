@@ -1,4 +1,6 @@
-# steam-deck-swap-resizer
+# THIS SCRIPT HAS BEEN DEPRECATED IN FAVOR OF https://github.com/CryoByte33/steam-deck-utilities
+
+## steam-deck-swap-resizer
 A simple script to help users resize the swap file on their Steam Decks.
 
 ## Usage
